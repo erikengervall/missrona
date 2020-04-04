@@ -1,5 +1,9 @@
 /* eslint-disable no-undef */
-import { GoogleMap, LoadScript, HeatmapLayer } from "@react-google-maps/api"
+import {
+  GoogleMap,
+  // HeatmapLayer,
+  LoadScript,
+} from "@react-google-maps/api"
 import React from "react"
 
 const center = {
@@ -29,7 +33,7 @@ const ExampleHeatmap = () => (
         center={center}
         onClick={onClick}
       >
-        <HeatmapLayer
+        {/* <HeatmapLayer
           data={[
             new google.maps.LatLng(37.782, -122.447),
             new google.maps.LatLng(37.782, -122.445),
@@ -46,7 +50,7 @@ const ExampleHeatmap = () => (
             new google.maps.LatLng(37.785, -122.437),
             new google.maps.LatLng(37.785, -122.435),
           ]}
-        />
+        /> */}
       </GoogleMap>
     </LoadScript>
   </div>
