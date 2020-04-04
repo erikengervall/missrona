@@ -3,8 +3,8 @@ import {
   GoogleMap,
   // HeatmapLayer,
   LoadScript,
-} from "@react-google-maps/api"
-import React from "react"
+} from '@react-google-maps/api'
+import React from 'react'
 
 const center = {
   lat: 37.774546,
@@ -12,21 +12,21 @@ const center = {
 }
 
 const onClick = (...args) => {
-  console.log("onClick args: ", args)
+  console.log('onClick args: ', args)
 }
 
 const ExampleHeatmap = () => (
   <div id="map">
     <LoadScript
       id="script-loader"
-      googleMapsApiKey={"AIzaSyB70fmdxTT6eYDICyXwGr7rZDy-0DZJSQY"} // https://console.cloud.google.com/apis/credentials
+      googleMapsApiKey={'AIzaSyB70fmdxTT6eYDICyXwGr7rZDy-0DZJSQY'} // https://console.cloud.google.com/apis/credentials
     >
       <GoogleMap
         mapContainerStyle={{
-          position: "static",
-          overflow: "inherit",
-          height: "inherit",
-          width: "inherit",
+          position: 'static',
+          overflow: 'inherit',
+          height: 'inherit',
+          width: 'inherit',
         }}
         zoom={13}
         center={center}

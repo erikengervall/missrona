@@ -1,5 +1,5 @@
 module.exports = {
-  plugins: ['jest', 'no-only-tests', 'security', 'sonarjs'],
+  plugins: ['prettier', 'react'],
   root: true,
   extends: ['eslint:recommended', 'prettier', 'plugin:prettier/recommended'],
   parserOptions: {
@@ -8,17 +8,18 @@ module.exports = {
     sourceType: 'module',
     ecmaFeatures: {
       modules: true,
+      jsx: true,
     },
   },
   env: {
     node: true,
     es6: true,
+    browser: true,
     jest: true,
   },
   rules: {
     'sonarjs/no-duplicate-string': 'off',
     'no-unused-vars': 'off',
-    'no-only-tests/no-only-tests': 2,
     'object-shorthand': ['error', 'always'],
     semi: ['error', 'never'],
     'security/detect-non-literal-fs-filename': 'off',
