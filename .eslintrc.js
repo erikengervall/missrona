@@ -4,7 +4,6 @@ module.exports = {
   extends: ['eslint:recommended', 'prettier', 'plugin:prettier/recommended'],
   parserOptions: {
     ecmaVersion: 8,
-    ecmaVersion: 6,
     sourceType: 'module',
     ecmaFeatures: {
       modules: true,

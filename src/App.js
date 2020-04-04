@@ -1,3 +1,4 @@
+import 'antd/dist/antd.css'
 import './App.css'
 import Form from './Form'
 import Map from './Map'
