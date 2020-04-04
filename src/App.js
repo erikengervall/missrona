@@ -3,13 +3,21 @@ import './App.css'
 import Form from './Form'
 import Map from './Map'
 import React from 'react'
+import { Layout, Space } from 'antd'
+
+const { Footer, Content } = Layout
 
 function App() {
   return (
-    <div id="app">
-      <Form />
-      <Map />
-    </div>
+    <Layout>
+      <Content>
+        <Space direction={'vertical'}>
+          <Form />
+          <Map />
+        </Space>
+      </Content>
+      <Footer style={{ textAlign: 'center' }}>{'Missrona ©2020'}</Footer>
+    </Layout>
   )
 }
 

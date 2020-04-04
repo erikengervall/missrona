@@ -1,4 +1,5 @@
 const cdk = require('@aws-cdk/core')
+const s3 = require('@aws-cdk/aws-s3')
 const lambda = require('@aws-cdk/aws-lambda')
 const ssm = require('@aws-cdk/aws-secretsmanager')
 
@@ -34,6 +35,14 @@ class AppStack extends cdk.Stack {
     })
 
     mongoSecrets.grantRead(addLambda)
+
+    const hostBucket = new s3.Bucket(this, 'hostBucket', {
+      bucketName: 'missrona-host',
+      websiteIndexDocument: 'index.html',
+      websiteErrorDocument: 'index.html',
+    })
+
+    hostBucket.grantPublicAccess('*', 's3:GetObject')
   }
 }
 
