@@ -10,3 +10,10 @@
   margin: 'auto';
   width: '50%';
 }
+
+div:focus,
+button:focus,
+button:active {
+  outline: none;
+  border: none;
+}
