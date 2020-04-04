@@ -11,6 +11,9 @@
     "eject": "react-scripts eject"
   },
   "dependencies": {
+    "@aws-cdk/aws-lambda": "^1.31.0",
+    "@aws-cdk/aws-secretsmanager": "^1.31.0",
+    "@aws-cdk/core": "^1.31.0",
     "@react-google-maps/api": "^1.8.6",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
@@ -21,7 +24,6 @@
     "eslint-config-prettier": "^6.10.1",
     "eslint-plugin-prettier": "^3.1.2",
     "eslint-plugin-react": "^7.19.0",
-    "mongoose": "^5.9.7",
     "prettier": "^2.0.2",
     "prettier-eslint": "^9.0.1",
     "react": "^16.13.1",
