@@ -6,7 +6,12 @@
   color: white;
 }
 
+#form {
+  height: 30vh;
+  width: 100vw;
+}
+
 #map {
-  min-height: 100vh;
-  min-width: 100vw;
+  height: 70vh;
+  width: 100vw;
 }

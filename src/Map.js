@@ -22,12 +22,11 @@ const ExampleHeatmap = () => (
       googleMapsApiKey={"AIzaSyB70fmdxTT6eYDICyXwGr7rZDy-0DZJSQY"} // https://console.cloud.google.com/apis/credentials
     >
       <GoogleMap
-        id="heatmap-example"
         mapContainerStyle={{
           position: "static",
           overflow: "inherit",
-          height: "100vh",
-          width: "100vw",
+          height: "inherit",
+          width: "inherit",
         }}
         zoom={13}
         center={center}
