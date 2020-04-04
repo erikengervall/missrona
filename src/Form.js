@@ -1,7 +1,13 @@
-import React from "react"
+import React from 'react'
 
 function Form() {
-  return <div className="form">{/* <Form /> */}</div>
+  return (
+    <div id="form">
+      <div className="status">😄</div>
+      <div className="status">😐</div>
+      <div className="status">😩</div>
+    </div>
+  )
 }
 
 export default Form

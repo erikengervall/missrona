@@ -1,11 +1,11 @@
-import "./App.css"
-import Form from "./Form"
-import Map from "./Map"
-import React from "react"
+import './App.css'
+import Form from './Form'
+import Map from './Map'
+import React from 'react'
 
 function App() {
   return (
-    <div className="App">
+    <div id="app">
       <Form />
       <Map />
     </div>

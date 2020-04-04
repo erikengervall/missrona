@@ -1,14 +1,9 @@
-.App {
+#app {
   min-height: 100vh;
   min-width: 100vw;
   text-align: center;
   background-color: #282c34;
   color: white;
-}
-
-#form {
-  height: 30vh;
-  width: 100vw;
 }
 
 #map {
