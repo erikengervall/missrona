@@ -1,9 +1,10 @@
-import React, { useState, useRef } from 'react'
-import { Button, Tooltip, Space, Typography, Tabs } from 'antd'
-import Centered from './Centered'
 import { Autocomplete } from '@react-google-maps/api'
+import { Button, Tooltip, Space, Typography, Tabs } from 'antd'
+import { SearchOutlined, CompassOutlined, CloseOutlined, SendOutlined } from '@ant-design/icons'
+import Centered from './Centered'
+import React, { useState, useRef } from 'react'
 
-const { Title, Text } = Typography
+const { Title, Text, Paragraph } = Typography
 const { TabPane } = Tabs
 
 const FEELS = {
@@ -31,14 +32,18 @@ const EmojiButton = ({ feel, selectedFeel, setSelectedFeel, isActive }) => {
   const { emoji, title, colour, tooltip } = feel
 
   return (
-    <div style={{ width: '80px', height: '100px' }}>
+    <div
+      style={{
+        width: 80,
+        height: 80,
+      }}
+    >
       <Tooltip title={tooltip}>
-        <div style={{ width: '70px' }}>
+        <div style={{ width: 70 }}>
           <div
             style={{
               backgroundColor: colour,
-              border: isActive ? '1px solid black' : 'none',
-              borderRadius: isActive ? 3 : 0,
+              borderRadius: 3,
               padding: isActive ? 1 : 0,
             }}
           >
@@ -59,7 +64,7 @@ const EmojiButton = ({ feel, selectedFeel, setSelectedFeel, isActive }) => {
   )
 }
 
-const LocationInput = ({ setLat, setLng }) => {
+const LocationInput = ({ setLat, setLng, tab }) => {
   const autocomplete = useRef(null)
 
   const autocompleteOnLoad = (_autocomplete) => {
@@ -82,9 +87,8 @@ const LocationInput = ({ setLat, setLng }) => {
 
   return (
     <Autocomplete onLoad={autocompleteOnLoad} onPlaceChanged={autocompleteOnPlaceChanged}>
-      <div style={{ padding: 5, minHeight: 235 }}>
+      <div style={{ padding: 5, marginBottom: tab === 0 ? 20 : 0 }}>
         <Title level={2}>Where do you live?</Title>
-
         <input
           type="text"
           placeholder="Search location"
@@ -102,42 +106,12 @@ const LocationInput = ({ setLat, setLng }) => {
             textAlign: 'center',
           }}
         />
-
-        {!!navigator.geolocation && (
-          <>
-            <Typography.Text strong style={{ margin: '5px 0', display: 'block', fontSize: 16 }}>
-              OR
-            </Typography.Text>
-
-            <Button
-              onClick={() => {
-                navigator.geolocation.getCurrentPosition(
-                  (position) => {
-                    console.log('navigator.geolocation.getCurrentPosition > ', position.coords)
-                    setLat(position.coords.latitude)
-                    setLng(position.coords.longitude)
-                  },
-                  (error) => {
-                    console.error(
-                      'Something went wrong when requesting GPS location with error:',
-                      error
-                    )
-                    alert('Something went wrong when requesting GPS location')
-                  }
-                )
-              }}
-              style={{ width: '90%', background: 'grey', color: 'white' }}
-            >
-              Use GPS
-            </Button>
-          </>
-        )}
       </div>
     </Autocomplete>
   )
 }
 
-const Form = ({ setLat, setLng }) => {
+const Form = ({ setLat, setLng, lat, lng }) => {
   const [selectedFeel, setSelectedFeel] = useState()
 
   return (
@@ -159,12 +133,16 @@ const Form = ({ setLat, setLng }) => {
       }}
     >
       <Tabs
-        defaultActiveKey="1"
+        defaultActiveKey="0"
         // onChange={(index) => console.log('Tab #' + index)}
       >
-        <TabPane tab="Health check" key="0">
+        <TabPane tab="Health check" key="0" style={{ minHeight: 235 }}>
           <Centered>
             <Title level={2}>How are you feeling?</Title>
+            <Paragraph>
+              Are you experiencing any symptoms of fever, sore throat, cough, weariness, or
+              respiratory distress?
+            </Paragraph>
             <Space>
               {Object.values(FEELS).map((feel, index) => (
                 <EmojiButton
@@ -179,15 +157,67 @@ const Form = ({ setLat, setLng }) => {
           </Centered>
           {selectedFeel && (
             <Centered>
-              <LocationInput setLat={setLat} setLng={setLng} />
-              <Button onClick={() => setSelectedFeel(undefined)}>Cancel</Button>
-              <Button>Submit</Button>
+              <LocationInput setLat={setLat} setLng={setLng} tab={0} />
+              <Space>
+                <Button
+                  type="secondary"
+                  shape="round"
+                  icon={<CloseOutlined />}
+                  size={'medium'}
+                  onClick={() => setSelectedFeel(undefined)}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  type="primary"
+                  shape="round"
+                  icon={<SendOutlined />}
+                  size={'medium'}
+                  disabled={!lat || !lng || !selectedFeel}
+                  onClick={() => {
+                    console.log("At this point it's definitely time to send eine kleine rekvest")
+                  }}
+                >
+                  Submit
+                </Button>
+              </Space>
             </Centered>
           )}
         </TabPane>
 
-        <TabPane tab="Browse regions" key="1">
-          <LocationInput setLat={setLat} setLng={setLng} />
+        <TabPane tab="Browse regions" key="1" style={{ minHeight: 235 }}>
+          <LocationInput setLat={setLat} setLng={setLng} tab={1} />
+          <Space middle style={{ marginTop: 20 }}>
+            {!!navigator.geolocation && (
+              <Button
+                type="secondary"
+                shape="round"
+                icon={<CompassOutlined />}
+                size={'medium'}
+                onClick={() => {
+                  navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                      console.log('navigator.geolocation.getCurrentPosition > ', position.coords)
+                      setLat(position.coords.latitude)
+                      setLng(position.coords.longitude)
+                    },
+                    (error) => {
+                      console.error(
+                        'Something went wrong when requesting GPS location with error:',
+                        error
+                      )
+                      alert('Something went wrong when requesting GPS location')
+                    }
+                  )
+                }}
+              >
+                Use GPS
+              </Button>
+            )}
+            <Button type="primary" shape="round" icon={<SearchOutlined />} size={'medium'}>
+              Search
+            </Button>
+          </Space>
         </TabPane>
       </Tabs>
     </div>

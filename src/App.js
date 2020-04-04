@@ -22,7 +22,7 @@ const App = () => {
         <Content>
           <Space direction={'vertical'}>
             <Map lat={lat} lng={lng} />
-            <Form setLat={setLat} setLng={setLng} />
+            <Form setLat={setLat} setLng={setLng} lat={lat} lng={lng} />
           </Space>
         </Content>
       </Layout>
