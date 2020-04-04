@@ -19,7 +19,7 @@ const ExampleHeatmap = () => (
   <div id="map">
     <LoadScript
       id="script-loader"
-      googleMapsApiKey={"AIzaSyC5cfYaVv1ODiuEuLbdm_EqVLwoXohYbTg"} // https://console.cloud.google.com/apis/credentials
+      googleMapsApiKey={"AIzaSyB70fmdxTT6eYDICyXwGr7rZDy-0DZJSQY"} // https://console.cloud.google.com/apis/credentials
     >
       <GoogleMap
         id="heatmap-example"
