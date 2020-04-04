@@ -12,11 +12,11 @@ function App() {
     <Layout>
       <Content>
         <Space direction={'vertical'}>
-          <Form />
           <Map />
+          <Form />
         </Space>
       </Content>
-      <Footer style={{ textAlign: 'center' }}>{'Missrona ©2020'}</Footer>
+      {/* <Footer style={{ textAlign: 'center' }}>{'Missrona ©2020'}</Footer> */}
     </Layout>
   )
 }

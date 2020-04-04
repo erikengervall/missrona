@@ -20,14 +20,19 @@ const getDbUrl = async () => {
 
   const { MONGO_USERNAME, MONGO_PASSWORD, MONGO_URL } = secrets
 
-  const url = `mongodb+srv://${MONGO_USERNAME}:${MONGO_PASSWORD}@${MONGO_URL}`
-
-  console.log(secrets)
-  console.log(MONGO_USERNAME, MONGO_PASSWORD, MONGO_URL)
-  console.log(url)
-
-  return url
+  return `mongodb+srv://${MONGO_USERNAME}:${MONGO_PASSWORD}@${MONGO_URL}`
 }
+
+const userSchema = new mongoose.Schema(
+  {
+    userId: String,
+    personaId: {
+      type: String,
+      unique: true,
+    },
+  },
+  { autoIndex: false }
+)
 
 const feelingSchema = new mongoose.Schema(
   {
@@ -42,28 +47,15 @@ const feelingSchema = new mongoose.Schema(
   { autoIndex: false }
 )
 
-const userSchema = new mongoose.Schema(
-  {
-    userId: String,
-    personaId: {
-      type: String,
-      unique: true,
-    },
-  },
-  { autoIndex: false }
-)
-
 const User = mongoose.model('User', userSchema)
 const Feeling = mongoose.model('Feeling', feelingSchema)
 
 let db = null
 
 exports.add = async (event) => {
-  console.log('start')
   const {
     body: { personaId, feeling, location },
   } = event
-  console.log('get request')
 
   if (!db) {
     try {
@@ -73,16 +65,12 @@ exports.add = async (event) => {
         useUnifiedTopology: true,
       })
       db = connection
-      console.log('db connected')
     } catch (error) {
       return console.error(error)
     }
   }
-  console.log('db ready')
 
   let { userId } = await User.findOneAndUpdate({ personaId }, {}, { upsert: true, new: true })
-  console.log('got user')
 
   await new Feeling({ userId, feeling, location }).save()
-  console.log('saved feeling')
 }
