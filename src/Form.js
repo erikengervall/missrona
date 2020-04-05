@@ -7,9 +7,9 @@ const { TabPane } = Tabs
 
 const styles = {
   container: {
-    padding: 15,
-    paddingLeft: 30,
-    paddingRight: 30,
+    padding: 5,
+    paddingLeft: 15,
+    paddingRight: 15,
     background: 'white',
     borderRadius: 10,
     textAlign: 'center',

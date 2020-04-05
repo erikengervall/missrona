@@ -1,20 +1,26 @@
 import { GoogleMap, Circle } from '@react-google-maps/api'
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback, useRef } from 'react'
+import getFeelData from './api/getFeelinData'
+import getFeelinDataByBox from './api/getFeelinDataByBox'
 
-const axios = {
-  get: async () => ({
-    data: {
-      average: Math.random() * 3,
-    },
-  }),
+const styles = {
+  mapContainerStyle: {
+    position: 'relative',
+    height: '100%',
+    width: '100%',
+    overflow: 'inherit',
+  },
 }
 
 const ExampleHeatmap = ({ lat, lng }) => {
   const [aggregatedNearbyFeels, setAggregatedNearbyFeels] = useState()
+  const [boxData, setBoxData] = useState()
+  const bounds = useRef()
+  const map = useRef()
 
   useEffect(() => {
     const getAggregatedNearbyFeels = async () => {
-      const response = await axios.get(lat, lng)
+      const response = await getFeelData({ lat, lng })
       const derivedColor = () => {
         const { average } = response.data
         if (average < 1) return '#00ff00'
@@ -25,8 +31,6 @@ const ExampleHeatmap = ({ lat, lng }) => {
     }
     getAggregatedNearbyFeels()
   }, [lat, lng, setAggregatedNearbyFeels])
-
-  console.log({ aggregatedNearbyFeels })
 
   const options = {
     strokeColor: '#9e9e9e',
@@ -42,17 +46,32 @@ const ExampleHeatmap = ({ lat, lng }) => {
     zIndex: 1,
   }
 
+  const handleBoundsChanged = useCallback(() => {
+    if (map.current) {
+      const newBounds = map.current.getBounds()
+      if (!newBounds.equals(bounds.current)) {
+        bounds.current = newBounds
+        const { south, east, north, west } = bounds.current.toJSON()
+
+        const requestObj = { south, east, north, west }
+
+        getFeelinDataByBox(requestObj).then((response) => {
+          setBoxData(response)
+        })
+      }
+    } else {
+      console.log('very undefined')
+    }
+  }, [bounds])
+
   return (
     <GoogleMap
-      mapContainerStyle={{
-        position: 'relative',
-        height: '100%',
-        width: '100%',
-        overflow: 'inherit',
-      }}
+      onLoad={(ref) => (map.current = ref)}
+      mapContainerStyle={styles.mapContainerStyle}
       zoom={13}
       center={{ lat, lng }}
       options={{ disableDefaultUI: true }}
+      onBoundsChanged={handleBoundsChanged}
     >
       {!!aggregatedNearbyFeels && (
         <Circle

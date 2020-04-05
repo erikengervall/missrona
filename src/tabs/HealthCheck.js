@@ -1,10 +1,11 @@
-import React, { useState, useCallback } from 'react'
-import Centered from '../../Centered'
-import EmojiButton from '../components/EmojiButton'
 import { Button, Space, Typography } from 'antd'
-import LocationInput from '../components/LocationInput'
-import { FEELS } from '../constants'
 import { CloseOutlined, SendOutlined } from '@ant-design/icons'
+import React, { useState, useCallback } from 'react'
+
+import { FEELS } from '../constants'
+import Centered from '../components/Centered'
+import EmojiButton from '../components/EmojiButton'
+import LocationInput from '../components/LocationInput'
 import submitHealthCheck from '../api/submitHealthCheck'
 
 const { Title, Paragraph } = Typography
@@ -16,11 +17,17 @@ const HealthCheck = ({ setLat, setLng, lat, lng }) => {
   const handleCancel = useCallback(() => setSelectedFeel(undefined), [setSelectedFeel])
   const handleSubmit = useCallback(() => {
     const requestData = {
-      id: selectedFeel.id,
-      location: { lat, lng },
+      status: selectedFeel.status,
+      location: [lat, lng],
     }
 
     submitHealthCheck(requestData)
+      .then(() => {
+        console.log('successfully submitted health check!', { requestData })
+      })
+      .catch((e) => {
+        console.error('failed to submit health check', e)
+      })
   }, [selectedFeel, lat, lng])
 
   return (
@@ -34,7 +41,7 @@ const HealthCheck = ({ setLat, setLng, lat, lng }) => {
         <Space>
           {Object.values(FEELS).map((feel) => (
             <EmojiButton
-              key={`feel-emojibutton-${feel.id}`}
+              key={`feel-emojibutton-${feel.status}`}
               feel={feel}
               isActive={selectedFeel === feel}
               onSelect={setSelectedFeel}

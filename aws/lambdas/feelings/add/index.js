@@ -7,20 +7,21 @@ const ssm = new SecretsManager()
 mongoose.set('useFindAndModify', false)
 
 const getMongoURL = async () => {
-  let secrets
+  return `mongodb+srv://missrona:2rwhu5xKGRGTIP0D@hack-for-crysis-begkv.mongodb.net/missrona?retryWrites=true&w=majority`
+  // let secrets
 
-  const encryptedSecretValue = await ssm.getSecretValue({ SecretId: MONGO_SECRET_NAME }).promise()
+  // const encryptedSecretValue = await ssm.getSecretValue({ SecretId: MONGO_SECRET_NAME }).promise()
 
-  if ('SecretString' in encryptedSecretValue) {
-    secrets = JSON.parse(String(encryptedSecretValue.SecretString))
-  } else {
-    const buff = Buffer.from(String(encryptedSecretValue.SecretBinary), 'base64')
-    secrets = JSON.parse(buff.toString('ascii'))
-  }
+  // if ('SecretString' in encryptedSecretValue) {
+  //   secrets = JSON.parse(String(encryptedSecretValue.SecretString))
+  // } else {
+  //   const buff = Buffer.from(String(encryptedSecretValue.SecretBinary), 'base64')
+  //   secrets = JSON.parse(buff.toString('ascii'))
+  // }
 
-  const { MONGO_USERNAME, MONGO_PASSWORD, MONGO_URL } = secrets
+  // const { MONGO_USERNAME, MONGO_PASSWORD, MONGO_URL } = secrets
 
-  return `mongodb+srv://${MONGO_USERNAME}:${MONGO_PASSWORD}@${MONGO_URL}`
+  // return `mongodb+srv://${MONGO_USERNAME}:${MONGO_PASSWORD}@${MONGO_URL}`
 }
 
 const getMongoConnection = async () => {
@@ -51,25 +52,32 @@ const userSchema = new mongoose.Schema(
     personaId: {
       type: String,
       unique: true,
+      required: true,
     },
   },
   { autoIndex: false }
 )
+const User = mongoose.model('User', userSchema)
 
 const feelingSchema = new mongoose.Schema(
   {
-    userId: mongoose.Schema.Types.ObjectId,
+    userId: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: true,
+    },
     status: {
       type: Number,
       enum: [1, 2, 3],
-      default: 2,
+      required: true,
     },
-    location: String,
+    location: {
+      type: [Number],
+      required: true,
+    },
   },
   { autoIndex: false }
 )
-
-const User = mongoose.model('User', userSchema)
+feelingSchema.index({ location: '2dsphere' })
 const Feeling = mongoose.model('Feeling', feelingSchema)
 
 let mongo = null
@@ -77,7 +85,8 @@ let mongo = null
 exports.addFeeling = async (event) => {
   await getMongoConnection()
 
-  const { personaId, status, location } = JSON.parse(event.body)
+  const { status, location } = JSON.parse(event.body)
+  const { personaId } = JSON.parse(event.headers)
 
   let { _id } = await User.findOneAndUpdate({ personaId }, {}, { upsert: true, new: true })
 
