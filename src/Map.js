@@ -7,8 +7,8 @@ const ExampleHeatmap = ({ lat, lng }) => {
     <GoogleMap
       mapContainerStyle={{
         position: 'relative',
-        height: '100vh',
-        width: '100vw',
+        height: '100%',
+        width: '100%',
         overflow: 'inherit',
       }}
       zoom={13}

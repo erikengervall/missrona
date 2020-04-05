@@ -3,7 +3,7 @@ import './App.css'
 import Form from './Form'
 import Map from './Map'
 import React, { useState } from 'react'
-import { Layout, Space } from 'antd'
+import { Layout } from 'antd'
 import { LoadScript } from '@react-google-maps/api'
 
 const { Content } = Layout
@@ -18,14 +18,10 @@ const App = () => {
       googleMapsApiKey={'AIzaSyB70fmdxTT6eYDICyXwGr7rZDy-0DZJSQY'} // https://console.cloud.google.com/apis/credentials
       libraries={['places', 'visualization']}
     >
-      <Layout>
-        <Content>
-          <Space direction={'vertical'}>
-            <Map lat={lat} lng={lng} />
-            <Form setLat={setLat} setLng={setLng} lat={lat} lng={lng} />
-          </Space>
-        </Content>
-      </Layout>
+      <Content style={{ width: '100vw', height: '100vh' }}>
+        <Map lat={lat} lng={lng} />
+        <Form setLat={setLat} setLng={setLng} lat={lat} lng={lng} />
+      </Content>
     </LoadScript>
   )
 }
