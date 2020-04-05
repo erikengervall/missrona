@@ -39,6 +39,7 @@ const LocationInput = ({ setLat, setLng, tab }) => {
       setLat(place.geometry.location.lat())
       setLng(place.geometry.location.lng())
       console.log('Autocomplete result:', {
+        formatted_address: autocomplete.current.getPlace().formatted_address,
         lat: place.geometry.location.lat(),
         lng: place.geometry.location.lng(),
       })

@@ -43,26 +43,27 @@ const HealthCheck = ({ setLat, setLng, lat, lng, setActiveKey }) => {
             If your symptoms change in any way, you can always update your health status.
           </Paragraph>
 
-          <Space>
-            <Button
-              type="secondary"
-              shape="round"
-              icon={<SmileOutlined />}
-              size={'medium'}
-              onClick={() => setShowThankYou(false)}
-            >
-              Back to submission screen
-            </Button>
-            <Button
-              type="primary"
-              shape="round"
-              icon={<SendOutlined />}
-              size={'medium'}
-              onClick={() => setActiveKey(TABS.BROWSE_REGIONS)}
-            >
-              Browse regions
-            </Button>
-          </Space>
+          {/* <Space> */}
+          <Button
+            type="secondary"
+            shape="round"
+            icon={<SmileOutlined />}
+            size={'medium'}
+            onClick={() => setShowThankYou(false)}
+            style={{ marginRight: 10, marginBottom: 10 }}
+          >
+            Back to submission screen
+          </Button>
+          <Button
+            type="primary"
+            shape="round"
+            icon={<SendOutlined />}
+            size={'medium'}
+            onClick={() => setActiveKey(TABS.BROWSE_REGIONS)}
+          >
+            Browse regions
+          </Button>
+          {/* </Space> */}
         </Centered>
       ) : (
         <>

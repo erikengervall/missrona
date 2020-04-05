@@ -50,7 +50,7 @@ const Form = (props) => {
         defaultActiveKey={TABS.HEALTH_CHECK}
         onChange={(key) => setActiveKey(key)}
         activeKey={activeKey}
-        style={{ height: isHidden ? 10 : 'inherit' }}
+        style={{ height: isHidden ? 15 : 'inherit' }}
       >
         <TabPane tab="Health check" key={TABS.HEALTH_CHECK} style={{ minHeight: 235 }}>
           <HealthCheck {...props} setActiveKey={setActiveKey} />
