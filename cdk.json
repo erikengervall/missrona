@@ -1,3 +1,3 @@
 {
-  "app": "node infra/index.js"
+  "app": "node aws/index.js"
 }

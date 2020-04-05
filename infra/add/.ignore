@@ -1,3 +1,0 @@
-const USERNAME = 'missrona'
-const PASSWORD = '2rwhu5xKGRGTIP0D'
-const MONGO_URL = 'hack-for-crysis-begkv.mongodb.net/test?retryWrites=true&w=majority'

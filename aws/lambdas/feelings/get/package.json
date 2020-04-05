@@ -1,0 +1,16 @@
+{
+  "name": "@missrona-feelings/add",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "install:packages": "yarn"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "aws-sdk": "^2.653.0",
+    "mongoose": "^5.9.7"
+  }
+}

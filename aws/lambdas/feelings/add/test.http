@@ -1,0 +1,13 @@
+@host = https://missrona.sousa.cloud
+###
+
+# @name addFeeling
+
+POST {{host}}/feelings HTTP/1.1
+Content-Type: application/json
+
+{
+  "personaId": "aaa",
+  "status": 1,
+  "location": "11246"
+}

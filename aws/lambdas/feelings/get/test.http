@@ -1,0 +1,8 @@
+@host = https://missrona.sousa.cloud
+###
+
+# @name getFeeling
+
+GET {{host}}/feelings HTTP/1.1
+Content-Type: application/json
+

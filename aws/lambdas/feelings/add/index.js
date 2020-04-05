@@ -6,7 +6,7 @@ const { MONGO_SECRET_NAME } = process.env
 const ssm = new SecretsManager()
 mongoose.set('useFindAndModify', false)
 
-const getDbUrl = async () => {
+const getMongoURL = async () => {
   let secrets
 
   const encryptedSecretValue = await ssm.getSecretValue({ SecretId: MONGO_SECRET_NAME }).promise()
@@ -23,9 +23,31 @@ const getDbUrl = async () => {
   return `mongodb+srv://${MONGO_USERNAME}:${MONGO_PASSWORD}@${MONGO_URL}`
 }
 
+const getMongoConnection = async () => {
+  if (!mongo) {
+    try {
+      const mongoURL = await getMongoURL()
+
+      const { connection } = await mongoose.connect(mongoURL, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+      })
+
+      mongo = connection
+    } catch (error) {
+      console.error(error)
+      return {
+        statusCode: 500,
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+        },
+      }
+    }
+  }
+}
+
 const userSchema = new mongoose.Schema(
   {
-    userId: String,
     personaId: {
       type: String,
       unique: true,
@@ -36,7 +58,7 @@ const userSchema = new mongoose.Schema(
 
 const feelingSchema = new mongoose.Schema(
   {
-    userId: String,
+    userId: mongoose.Schema.Types.ObjectId,
     status: {
       type: Number,
       enum: [1, 2, 3],
@@ -50,27 +72,23 @@ const feelingSchema = new mongoose.Schema(
 const User = mongoose.model('User', userSchema)
 const Feeling = mongoose.model('Feeling', feelingSchema)
 
-let db = null
+let mongo = null
 
-exports.add = async (event) => {
-  const {
-    body: { personaId, feeling, location },
-  } = event
+exports.addFeeling = async (event) => {
+  await getMongoConnection()
 
-  if (!db) {
-    try {
-      const dbUrl = await getDbUrl()
-      const { connection } = await mongoose.connect(dbUrl, {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-      })
-      db = connection
-    } catch (error) {
-      return console.error(error)
-    }
+  const { personaId, status, location } = JSON.parse(event.body)
+
+  let { _id } = await User.findOneAndUpdate({ personaId }, {}, { upsert: true, new: true })
+
+  const feeling = await Feeling.create({ userId: _id, status, location })
+
+  return {
+    statusCode: 201,
+    headers: {
+      'Content-Type': 'application/json',
+      'Access-Control-Allow-Origin': '*',
+    },
+    body: JSON.stringify({ _id: feeling._id }),
   }
-
-  let { userId } = await User.findOneAndUpdate({ personaId }, {}, { upsert: true, new: true })
-
-  await new Feeling({ userId, feeling, location }).save()
 }
