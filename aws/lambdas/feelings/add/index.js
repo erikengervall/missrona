@@ -7,21 +7,20 @@ const ssm = new SecretsManager()
 mongoose.set('useFindAndModify', false)
 
 const getMongoURL = async () => {
-  return `mongodb+srv://missrona:2rwhu5xKGRGTIP0D@hack-for-crysis-begkv.mongodb.net/missrona?retryWrites=true&w=majority`
-  // let secrets
+  let secrets
 
-  // const encryptedSecretValue = await ssm.getSecretValue({ SecretId: MONGO_SECRET_NAME }).promise()
+  const encryptedSecretValue = await ssm.getSecretValue({ SecretId: MONGO_SECRET_NAME }).promise()
 
-  // if ('SecretString' in encryptedSecretValue) {
-  //   secrets = JSON.parse(String(encryptedSecretValue.SecretString))
-  // } else {
-  //   const buff = Buffer.from(String(encryptedSecretValue.SecretBinary), 'base64')
-  //   secrets = JSON.parse(buff.toString('ascii'))
-  // }
+  if ('SecretString' in encryptedSecretValue) {
+    secrets = JSON.parse(String(encryptedSecretValue.SecretString))
+  } else {
+    const buff = Buffer.from(String(encryptedSecretValue.SecretBinary), 'base64')
+    secrets = JSON.parse(buff.toString('ascii'))
+  }
 
-  // const { MONGO_USERNAME, MONGO_PASSWORD, MONGO_URL } = secrets
+  const { MONGO_USERNAME, MONGO_PASSWORD, MONGO_URL } = secrets
 
-  // return `mongodb+srv://${MONGO_USERNAME}:${MONGO_PASSWORD}@${MONGO_URL}`
+  return `mongodb+srv://${MONGO_USERNAME}:${MONGO_PASSWORD}@${MONGO_URL}`
 }
 
 const getMongoConnection = async () => {
@@ -85,12 +84,15 @@ let mongo = null
 exports.addFeeling = async (event) => {
   await getMongoConnection()
 
-  const { status, location } = JSON.parse(event.body)
+  const {
+    status,
+    location: [y, x],
+  } = JSON.parse(event.body)
   const { personaId } = event.headers
 
   let { _id } = await User.findOneAndUpdate({ personaId }, {}, { upsert: true, new: true })
 
-  const feeling = await Feeling.create({ userId: _id, status, location })
+  const feeling = await Feeling.create({ userId: _id, status, location: [x, y] })
 
   return {
     statusCode: 201,

@@ -27,6 +27,15 @@ class AppStack extends cdk.Stack {
       },
     })
 
+    const hostBucket = new s3.Bucket(this, 'hostBucket', {
+      bucketName: 'missrona-host',
+      websiteIndexDocument: 'index.html',
+      websiteErrorDocument: 'index.html',
+      removalPolicy: cdk.RemovalPolicy.DESTROY,
+    })
+
+    hostBucket.grantPublicAccess('*', 's3:GetObject')
+
     const api = new apigateway.RestApi(this, 'missrona-api', {
       defaultCorsPreflightOptions: {
         allowOrigins: apigateway.Cors.ALL_ORIGINS,
@@ -77,15 +86,6 @@ class AppStack extends cdk.Stack {
       code: './aws/lambdas/feelings/get',
     })
     feelings.addMethod('GET', new apigateway.LambdaIntegration(getFeelings))
-
-    const hostBucket = new s3.Bucket(this, 'hostBucket', {
-      bucketName: 'missrona-host',
-      websiteIndexDocument: 'index.html',
-      websiteErrorDocument: 'index.html',
-      removalPolicy: cdk.RemovalPolicy.DESTROY,
-    })
-
-    hostBucket.grantPublicAccess('*', 's3:GetObject')
   }
 }
 
