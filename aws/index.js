@@ -27,7 +27,13 @@ class AppStack extends cdk.Stack {
       },
     })
 
-    const api = new apigateway.RestApi(this, 'missrona-api')
+    const api = new apigateway.RestApi(this, 'missrona-api', {
+      defaultCorsPreflightOptions: {
+        allowOrigins: apigateway.Cors.ALL_ORIGINS,
+        allowMethods: apigateway.Cors.ALL_METHODS,
+        allowHeaders: ['*'],
+      },
+    })
 
     // =======================================================================
     // BEGIN ROUTE53 DEFINITIONS

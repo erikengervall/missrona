@@ -1,7 +1,9 @@
-import React from 'react'
 import { Tabs } from 'antd'
-import HealthCheck from './tabs/HealthCheck'
+import React, { useState } from 'react'
+
+import { TABS } from './constants'
 import BrowseRegions from './tabs/BrowseRegions'
+import HealthCheck from './tabs/HealthCheck'
 
 const { TabPane } = Tabs
 
@@ -24,14 +26,20 @@ const styles = {
 }
 
 const Form = (props) => {
+  const [activeKey, setActiveKey] = useState('0')
+
   return (
     <div style={styles.container}>
-      <Tabs defaultActiveKey="0">
-        <TabPane tab="Health check" key="0" style={{ minHeight: 235 }}>
-          <HealthCheck {...props} />
+      <Tabs
+        defaultActiveKey={TABS.HEALTH_CHECK}
+        onChange={(key) => setActiveKey(key)}
+        activeKey={activeKey}
+      >
+        <TabPane tab="Health check" key={TABS.HEALTH_CHECK} style={{ minHeight: 235 }}>
+          <HealthCheck {...props} setActiveKey={setActiveKey} />
         </TabPane>
 
-        <TabPane tab="Browse regions" key="1" style={{ minHeight: 235 }}>
+        <TabPane tab="Browse regions" key={TABS.BROWSE_REGIONS} style={{ minHeight: 235 }}>
           <BrowseRegions {...props} />
         </TabPane>
       </Tabs>

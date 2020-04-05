@@ -37,9 +37,9 @@ const BrowseRegions = ({ setLat, setLng }) => {
             Use GPS
           </Button>
         )}
-        <Button type="primary" shape="round" icon={<SearchOutlined />} size={'medium'}>
+        {/* <Button type="primary" shape="round" icon={<SearchOutlined />} size={'medium'}>
           Search
-        </Button>
+        </Button> */}
       </Space>
     </React.Fragment>
   )

@@ -2,6 +2,7 @@ import { GoogleMap, Circle } from '@react-google-maps/api'
 import React, { useState, useEffect, useCallback, useRef } from 'react'
 import getFeelData from './api/getFeelinData'
 import getFeelinDataByBox from './api/getFeelinDataByBox'
+import throttle from 'lodash.throttle'
 
 const styles = {
   mapContainerStyle: {
@@ -46,23 +47,30 @@ const ExampleHeatmap = ({ lat, lng }) => {
     zIndex: 1,
   }
 
-  const handleBoundsChanged = useCallback(() => {
-    if (map.current) {
-      const newBounds = map.current.getBounds()
-      if (!newBounds.equals(bounds.current)) {
-        bounds.current = newBounds
-        const { south, east, north, west } = bounds.current.toJSON()
+  const handleBoundsChanged = useCallback(
+    throttle(
+      () => {
+        if (map.current) {
+          const newBounds = map.current.getBounds()
+          if (!newBounds.equals(bounds.current)) {
+            bounds.current = newBounds
+            const { south, east, north, west } = bounds.current.toJSON()
 
-        const requestObj = { south, east, north, west }
+            const requestObj = { south, east, north, west }
 
-        getFeelinDataByBox(requestObj).then((response) => {
-          setBoxData(response)
-        })
-      }
-    } else {
-      console.log('very undefined')
-    }
-  }, [bounds])
+            getFeelinDataByBox(requestObj).then((response) => {
+              setBoxData(response)
+            })
+          }
+        } else {
+          console.log('very undefined')
+        }
+      },
+      1000,
+      { leading: false, trailing: true }
+    ),
+    [bounds]
+  )
 
   return (
     <GoogleMap

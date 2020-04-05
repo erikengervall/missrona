@@ -7,7 +7,7 @@ if (!personaId) {
 }
 
 const config = {
-  baseURL: 'https://missrona.sousa.cloud',
+  baseURL: 'https://missrona.sousa.cloud/feelings',
   timeout: 1000 * 10,
   headers: { personaId },
 }

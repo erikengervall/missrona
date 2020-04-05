@@ -5,9 +5,9 @@
 
 POST {{host}}/feelings HTTP/1.1
 Content-Type: application/json
+personaId: "aaa"
 
 {
-  "personaId": "aaa",
   "status": 1,
-  "location": "11246"
+  "location": [59.3365601, 18.0321006]
 }

@@ -1,11 +1,16 @@
-import React, { useRef } from 'react'
-import { Typography } from 'antd'
 import { Autocomplete } from '@react-google-maps/api'
+import { Typography } from 'antd'
+import React, { useRef } from 'react'
+
+import { TABS } from '../constants'
 
 const { Title } = Typography
 
 const styles = {
-  container: (tab) => ({ padding: 5, marginBottom: tab === 0 ? 20 : 0 }),
+  container: (tab) => ({
+    padding: 5,
+    marginBottom: tab === TABS.HEALTH_CHECK ? 50 : 0,
+  }),
   input: {
     boxSizing: 'border-box',
     border: '1px solid transparent',

@@ -86,7 +86,7 @@ exports.addFeeling = async (event) => {
   await getMongoConnection()
 
   const { status, location } = JSON.parse(event.body)
-  const { personaId } = JSON.parse(event.headers)
+  const { personaId } = event.headers
 
   let { _id } = await User.findOneAndUpdate({ personaId }, {}, { upsert: true, new: true })
 

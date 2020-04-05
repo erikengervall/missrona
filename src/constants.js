@@ -1,4 +1,4 @@
-const FEELS = {
+export const FEELS = {
   Haphap: {
     colour: '#D5E8D4',
     emoji: '😄',
@@ -22,4 +22,7 @@ const FEELS = {
   },
 }
 
-export { FEELS }
+export const TABS = {
+  HEALTH_CHECK: '0',
+  BROWSE_REGIONS: '1',
+}

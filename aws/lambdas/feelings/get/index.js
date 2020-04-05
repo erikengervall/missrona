@@ -48,25 +48,33 @@ const getMongoConnection = async () => {
 
 const feelingSchema = new mongoose.Schema(
   {
-    userId: mongoose.Schema.Types.ObjectId,
+    userId: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: true,
+    },
     status: {
       type: Number,
       enum: [1, 2, 3],
-      default: 2,
+      required: true,
     },
-    location: String,
+    location: {
+      type: [Number],
+      required: true,
+    },
   },
   { autoIndex: false }
 )
-
+feelingSchema.index({ location: '2dsphere' })
 const Feeling = mongoose.model('Feeling', feelingSchema)
 
 let mongo = null
 
-exports.getFeelings = async () => {
+exports.getFeelings = async (event) => {
   await getMongoConnection()
 
-  const feelings = await Feeling.find({})
+  const { n, s, e, w } = event.queryStringParameters || {}
+
+  const feelings = {} //await Feeling.aggregate({})
 
   return {
     statusCode: 200,

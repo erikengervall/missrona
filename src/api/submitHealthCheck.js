@@ -1,7 +1,7 @@
 import { server } from '../YeOldeNetworkLayer'
 
 const submitHealthCheck = async (data) => {
-  const response = await server.post('/feelings', data)
+  const response = await server.post('/', data)
   return response.status === 200
 }
 
