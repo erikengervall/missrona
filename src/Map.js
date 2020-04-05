@@ -11,6 +11,20 @@ const styles = {
     width: '100%',
     overflow: 'inherit',
   },
+  circleOptions: (aggregatedNearbyFeels) => ({
+    strokeColor: '#9e9e9e',
+    strokeOpacity: 0.7,
+    strokeWeight: 2,
+    fillColor: '#FF0000',
+    fillOpacity: 0.25,
+    clickable: false,
+    draggable: false,
+    editable: false,
+    visible: true,
+    radius: 500,
+    zIndex: 1,
+    fillColor: aggregatedNearbyFeels,
+  }),
 }
 
 const ExampleHeatmap = ({ lat, lng }) => {
@@ -33,61 +47,50 @@ const ExampleHeatmap = ({ lat, lng }) => {
     getAggregatedNearbyFeels()
   }, [lat, lng, setAggregatedNearbyFeels])
 
-  const options = {
-    strokeColor: '#9e9e9e',
-    strokeOpacity: 0.7,
-    strokeWeight: 2,
-    fillColor: '#FF0000',
-    fillOpacity: 0.25,
-    clickable: false,
-    draggable: false,
-    editable: false,
-    visible: true,
-    radius: 500,
-    zIndex: 1,
-  }
-
   const handleBoundsChanged = useCallback(
     throttle(
       () => {
         if (map.current) {
           const newBounds = map.current.getBounds()
-          if (!newBounds.equals(bounds.current)) {
-            bounds.current = newBounds
-            const { south, east, north, west } = bounds.current.toJSON()
+          if (newBounds && newBounds.equals) {
+            if (!newBounds.equals(bounds.current)) {
+              bounds.current = newBounds
+              const { south, east, north, west } = bounds.current.toJSON()
 
-            const requestObj = { south, east, north, west }
+              const requestObj = { south, east, north, west }
 
-            getFeelinDataByBox(requestObj).then((response) => {
-              setBoxData(response)
-            })
+              getFeelinDataByBox(requestObj).then((response) => {
+                setBoxData(response)
+              })
+            }
           }
         } else {
           console.log('very undefined')
         }
       },
-      1000,
+      2000,
       { leading: false, trailing: true }
     ),
     [bounds]
   )
 
+  const handleLoad = useCallback((ref) => {
+    map.current = ref
+
+    // initial location
+    map.current.panTo({ lat, lng })
+  }, [])
+
   return (
     <GoogleMap
-      onLoad={(ref) => (map.current = ref)}
+      onLoad={handleLoad}
       mapContainerStyle={styles.mapContainerStyle}
       zoom={13}
-      center={{ lat, lng }}
       options={{ disableDefaultUI: true }}
       onBoundsChanged={handleBoundsChanged}
     >
       {!!aggregatedNearbyFeels && (
-        <Circle
-          center={{ lat, lng }}
-          options={Object.assign(options, {
-            fillColor: aggregatedNearbyFeels,
-          })}
-        />
+        <Circle center={{ lat, lng }} options={styles.circleOptions(aggregatedNearbyFeels)} />
       )}
     </GoogleMap>
   )

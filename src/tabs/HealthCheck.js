@@ -12,7 +12,7 @@ const { Title, Paragraph } = Typography
 
 const HealthCheck = ({ setLat, setLng, lat, lng, setActiveKey }) => {
   const [selectedFeel, setSelectedFeel] = useState()
-  const [submitted, setSubmitted] = useState(false)
+  const [showThankYou, setShowThankYou] = useState(false)
 
   const handleCancel = useCallback(() => setSelectedFeel(undefined), [setSelectedFeel])
   const handleSubmit = useCallback(() => {
@@ -30,37 +30,39 @@ const HealthCheck = ({ setLat, setLng, lat, lng, setActiveKey }) => {
       })
       .finally(() => {
         setSelectedFeel(undefined)
-        setSubmitted(true)
+        setShowThankYou(true)
       })
   }, [selectedFeel, lat, lng])
 
   return (
     <>
-      {submitted ? (
+      {showThankYou ? (
         <Centered>
           <Title level={2}>Thank you!</Title>
           <Paragraph>
             If your symptoms change in any way, you can always update your health status.
           </Paragraph>
 
-          <Button
-            type="secondary"
-            shape="round"
-            icon={<SmileOutlined />}
-            size={'medium'}
-            onClick={() => setSubmitted(false)}
-          >
-            Back to submission screen
-          </Button>
-          <Button
-            type="primary"
-            shape="round"
-            icon={<SendOutlined />}
-            size={'medium'}
-            onClick={() => setActiveKey(TABS.BROWSE_REGIONS)}
-          >
-            Browse regions
-          </Button>
+          <Space>
+            <Button
+              type="secondary"
+              shape="round"
+              icon={<SmileOutlined />}
+              size={'medium'}
+              onClick={() => setShowThankYou(false)}
+            >
+              Back to submission screen
+            </Button>
+            <Button
+              type="primary"
+              shape="round"
+              icon={<SendOutlined />}
+              size={'medium'}
+              onClick={() => setActiveKey(TABS.BROWSE_REGIONS)}
+            >
+              Browse regions
+            </Button>
+          </Space>
         </Centered>
       ) : (
         <>

@@ -15,6 +15,7 @@ const styles = {
     backgroundColor: colour,
     borderRadius: 3,
     padding: isActive ? 1 : 0,
+    transform: `scale(${isActive ? 1.1 : 1})`,
   }),
   emojiContainer: { paddingTop: 1 },
 }
@@ -22,10 +23,9 @@ const styles = {
 const EmojiButton = ({ feel, onSelect, isActive }) => {
   const { emoji, title, colour, tooltip } = feel
 
-  const buttonContainerStyle = useMemo(() => styles.buttonContainer({ colour, isActive }), [
-    colour,
-    isActive,
-  ])
+  const buttonContainerStyle = useMemo(() => {
+    return styles.buttonContainer({ colour, isActive })
+  }, [colour, isActive])
 
   const handleOnClick = useCallback(() => {
     onSelect(feel)
