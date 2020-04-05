@@ -19,7 +19,7 @@ const styles = {
   emojiContainer: { paddingTop: 1 },
 }
 
-const EmojiButton = ({ feel, selectedFeel, setSelectedFeel, isActive }) => {
+const EmojiButton = ({ feel, onSelect, isActive }) => {
   const { emoji, title, colour, tooltip } = feel
 
   const buttonContainerStyle = useMemo(() => styles.buttonContainer({ colour, isActive }), [
@@ -28,8 +28,8 @@ const EmojiButton = ({ feel, selectedFeel, setSelectedFeel, isActive }) => {
   ])
 
   const handleOnClick = useCallback(() => {
-    selectedFeel === title ? setSelectedFeel(undefined) : setSelectedFeel(title)
-  }, [selectedFeel, title, setSelectedFeel])
+    onSelect(feel)
+  }, [onSelect, feel])
 
   return (
     <div style={styles.container}>

@@ -1,15 +1,28 @@
-import React, { useState } from 'react'
+import React, { useState, useCallback } from 'react'
 import Centered from '../../Centered'
 import EmojiButton from '../components/EmojiButton'
 import { Button, Space, Typography } from 'antd'
 import LocationInput from '../components/LocationInput'
 import { FEELS } from '../constants'
 import { CloseOutlined, SendOutlined } from '@ant-design/icons'
+import submitHealthCheck from '../api/submitHealthCheck'
 
 const { Title, Paragraph } = Typography
 
 const HealthCheck = ({ setLat, setLng, lat, lng }) => {
   const [selectedFeel, setSelectedFeel] = useState()
+  console.log('selectedFeel', selectedFeel)
+
+  const handleCancel = useCallback(() => setSelectedFeel(undefined), [setSelectedFeel])
+  const handleSubmit = useCallback(() => {
+    const requestData = {
+      id: selectedFeel.id,
+      location: { lat, lng },
+    }
+
+    submitHealthCheck(requestData)
+  }, [selectedFeel, lat, lng])
+
   return (
     <React.Fragment>
       <Centered>
@@ -19,13 +32,12 @@ const HealthCheck = ({ setLat, setLng, lat, lng }) => {
           distress?
         </Paragraph>
         <Space>
-          {Object.values(FEELS).map((feel, index) => (
+          {Object.values(FEELS).map((feel) => (
             <EmojiButton
-              key={`feel-emojibutton-${index}`}
+              key={`feel-emojibutton-${feel.id}`}
               feel={feel}
-              isActive={selectedFeel === feel.title}
-              selectedFeel={selectedFeel}
-              setSelectedFeel={setSelectedFeel}
+              isActive={selectedFeel === feel}
+              onSelect={setSelectedFeel}
             />
           ))}
         </Space>
@@ -40,7 +52,7 @@ const HealthCheck = ({ setLat, setLng, lat, lng }) => {
               shape="round"
               icon={<CloseOutlined />}
               size={'medium'}
-              onClick={() => setSelectedFeel(undefined)}
+              onClick={handleCancel}
             >
               Cancel
             </Button>
@@ -50,9 +62,7 @@ const HealthCheck = ({ setLat, setLng, lat, lng }) => {
               icon={<SendOutlined />}
               size={'medium'}
               disabled={!lat || !lng || !selectedFeel}
-              onClick={() => {
-                console.log("At this point it's definitely time to send eine kleine rekvest")
-              }}
+              onClick={handleSubmit}
             >
               Submit
             </Button>
