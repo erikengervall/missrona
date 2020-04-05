@@ -1,4 +1,4 @@
-@host = https://missrona.sousa.cloud
+@host = https://api-missrona.sousa.cloud
 ###
 
 # @name getFeeling

@@ -28,7 +28,7 @@ class AppStack extends cdk.Stack {
     })
 
     const hostBucket = new s3.Bucket(this, 'hostBucket', {
-      bucketName: 'missrona-host',
+      bucketName: 'missrona.sousa.cloud',
       websiteIndexDocument: 'index.html',
       websiteErrorDocument: 'index.html',
       removalPolicy: cdk.RemovalPolicy.DESTROY,
@@ -52,7 +52,7 @@ class AppStack extends cdk.Stack {
       'arn:aws:acm:eu-west-1:072324662457:certificate/1f12f649-a59e-47ad-8cb0-7d4d78b0b4a4'
     )
 
-    const apiDomain = new apigateway.DomainName(this, 'domain', {
+    new apigateway.DomainName(this, 'domain', {
       certificate,
       domainName: 'api-missrona.sousa.cloud',
       mapping: api,
