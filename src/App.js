@@ -19,6 +19,20 @@ const App = () => {
       libraries={['places', 'visualization']}
     >
       <Content style={{ width: '100vw', height: '100vh' }}>
+        <a
+          href="./demo.mp4"
+          target="_blank"
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            background: 'rgba(255,255,255,0.9)',
+            padding: 5,
+            zIndex: 999,
+          }}
+        >
+          Demo vid
+        </a>
         <Map lat={lat} lng={lng} />
         <Form setLat={setLat} setLng={setLng} lat={lat} lng={lng} />
       </Content>
